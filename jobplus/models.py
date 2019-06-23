@@ -102,7 +102,7 @@ class EduExperience(Experience):
 
 
 class ProjectExperice(Experience):
-    __tablename__ = 'preject_experience'
+    __tablename__ = 'project_experience'
 
     name = db.Column(db.String(32), nullable=False)
     role = db.Column(db.String(32))
