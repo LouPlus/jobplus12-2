@@ -1,3 +1,5 @@
 from .front import front
-
-blueprints = [front]
+from .admin import admin
+from .user import user
+from .company import company
+from .job import job
