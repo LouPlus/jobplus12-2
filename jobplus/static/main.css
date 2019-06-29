@@ -11,6 +11,7 @@ a:visited {
 }
 
 
+
 .course__name,
 .course__description {
   text-overflow: ellipsis;
@@ -24,6 +25,15 @@ a:visited {
 
 .newest-job-list,
 .newest-company-list {
+
+.nav-pagination {
+  text-align: center;
+  clear: both;
+}
+
+.job-list,
+.company-list {
+
   margin-top: 15px;
 }
 
@@ -64,3 +74,8 @@ a:visited {
     color: #999;
   font-size: 14px;
  }
+
+ .company-meta {
+    color: #999;
+ }
+
