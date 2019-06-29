@@ -1,4 +1,4 @@
- {% extends "base.html" %}
+{% extends "base.html" %}
 {% from "macros.html" import render_form %}
 
 {% block title %}
@@ -11,4 +11,3 @@ Register
   {{ render_form(form, url_for('front.userregister')) }}
 </div>
 {% endblock %}
-
