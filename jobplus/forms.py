@@ -73,6 +73,7 @@ class UserProfileForm(FlaskForm):
 class CompanyProfileForm(FlaskForm):
     name = StringField('企业名称')
     email = StringField('邮箱', validators=[Required(), Email()])
+    phone = StringField('手机号')
     password = PasswordField('密码(不填写保持不变)')
     slug = StringField('Slug', validators=[Required(), Length(3, 24)])
     location = StringField('地址', validators=[Length(0, 64)])
@@ -93,12 +94,53 @@ class CompanyProfileForm(FlaskForm):
         if self.password.data:
             user.password = self.password.data
 
-        if user.company_detail:
-            company_detail = user.company_detail
+        if user.detail:
+            detail = user.detail
         else:
-            company_detail = CompanyDetail()
-            company_detail.user_id = user.id
-        self.populate_obj(company_detail)
+            detail = CompanyDetail()
+            detail.user_id = user.id
+        self.populate_obj(detail)
         db.session.add(user)
-        db.session.add(company_detail)
+        db.session.add(detail)
+        db.session.commit()
+
+
+class UserEditForm(FlaskForm):
+    email = StringField('邮箱', validators=[Required(), Email()])
+    password = PasswordField('密码')
+    real_name = StringField('姓名')
+    phone = StringField('手机号')
+    submit = SubmitField('提交')
+
+    def update(self, user):
+        self.populate_obj(user)
+        if self.password.data:
+            user.password = self.password.data
+        db.session.add(user)
+        db.session.commit()
+
+
+class CompanyEditForm(FlaskForm):
+    name = StringField('企业名称')
+    email = StringField('邮箱', validators=[Required(), Email()])
+    password = PasswordField('密码')
+    phone = StringField('手机号')
+    site = StringField('公司网站', validators=[Length(0, 64)])
+    description = StringField('一句话简介', validators=[Length(0, 100)])
+    submit = SubmitField('提交')
+
+    def update(self, company):
+        company.name = self.name.data
+        company.email = self.email.data
+        if self.password.data:
+            company.password = self.password.data
+        if company.detail:
+            detail = company.detail
+        else:
+            detail = CompanyDetail()
+            detail.user_id = company.id
+        detail.site = self.site.data
+        detail.description = self.description.data
+        db.session.add(company)
+        db.session.add(detail)
         db.session.commit()
