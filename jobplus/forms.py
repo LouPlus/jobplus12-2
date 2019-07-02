@@ -49,7 +49,7 @@ class RegisterForm(FlaskForm):
 
 
 class UserProfileForm(FlaskForm):
-    real_name = StringField('姓    real_name = StringField('姓名', [Required()])
+    real_name = StringField('姓名', [Required()])
     email = StringField('邮箱', validators=[Required(), Email()])
     password = PasswordField('密码(不填写保持不变)')
     phone = StringField('手机号')
