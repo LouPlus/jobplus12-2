@@ -1,6 +1,6 @@
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
-from flask_login import UserMixin
+from flask_login import UserMixin, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
@@ -50,11 +50,16 @@ class User(Base, UserMixin):
     # 企业用户详情
     detail = db.relationship('CompanyDetail', uselist=False)
 
-
     is_disable = db.Column(db.Boolean, default=False)
 
     def __repr__(self):
         return '<User:{}>'.format(self.name)
+
+    @property
+    def enable_jobs(self):
+        if not self.is_company:
+            raise AttributeError('User has no attribute enable_jobs')
+        return self.jobs.filter(Job.is_disable.is_(False))
 
     @property
     def password(self):
@@ -177,6 +182,7 @@ class Job(Base):
     salary_low = db.Column(db.Integer, nullable=False)
     salary_high = db.Column(db.Integer, nullable=False)
     location = db.Column(db.String(24))
+    description = db.Column(db.String(1500))
     # 职位标签，多个标签用逗号隔开，最多10个
     tags = db.Column(db.String(128))
     experience_requirement = db.Column(db.String(32))
@@ -187,6 +193,7 @@ class Job(Base):
     company_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'))
     company = db.relationship('User', uselist=False, backref=db.backref('jobs', lazy='dynamic'))
     views_count = db.Column(db.Integer, default=0)
+    is_disable = db.Column(db.Boolean, default=False)
 
     def __repr__(self):
         return '<Job {}>'.format(self.name)
@@ -195,8 +202,13 @@ class Job(Base):
     def tag_list(self):
         return self.tags.split(',')
 
+    @property
+    def current_user_is_applied(self):
+        d = Delivery.query.filter_by(job_id=self.id, user_id=current_user.id).first()
+        return (d is not None)
 
-class Dilivery(Base):
+
+class Delivery(Base):
     __tablename__ = 'delivery'
 
     # 等待企业审核
@@ -209,6 +221,15 @@ class Dilivery(Base):
     id = db.Column(db.Integer, primary_key=True)
     job_id = db.Column(db.Integer, db.ForeignKey('job.id', ondelete='SET NULL'))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='SET NULL'))
+    company_id = db.Column(db.Integer)
     status = db.Column(db.SmallInteger, default=STATUS_WAITING)
     # 企业回应
     response = db.Column(db.String(256))
+
+    @property
+    def user(self):
+        return User.query.get(self.user_id)
+
+    @property
+    def job(self):
+        return Job.query.get(self.job_id)

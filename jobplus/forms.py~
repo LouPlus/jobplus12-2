@@ -1,3 +1,9 @@
+<<<<<<< HEAD
+from flask_wtf import FlaskForm
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, ValidationError, IntegerField, TextAreaField
+from wtforms.validators import Length, Email, EqualTo, Required
+from jobplus.models import db, User, CompanyDetail
+=======
 import os
 from flask import url_for
 from flask_wtf import FlaskForm
@@ -5,7 +11,7 @@ from wtforms import StringField, PasswordField, SubmitField, BooleanField, Valid
 from flask_wtf.file import FileField, FileRequired
 from wtforms.validators import Length, Email, EqualTo, Required
 from jobplus.models import db, User, CompanyDetail, Job
-
+>>>>>>> 在线招聘系统
 
 
 class LoginForm(FlaskForm):
@@ -49,12 +55,20 @@ class RegisterForm(FlaskForm):
 
 
 class UserProfileForm(FlaskForm):
-    real_name = StringField('姓    real_name = StringField('姓名', [Required()])
+<<<<<<< HEAD
+    real_name = StringField('姓名')
+=======
+    real_name = StringField('姓名', [Required()])
+>>>>>>> 在线招聘系统
     email = StringField('邮箱', validators=[Required(), Email()])
     password = PasswordField('密码(不填写保持不变)')
     phone = StringField('手机号')
     work_years = IntegerField('工作年限')
+<<<<<<< HEAD
+    resume_url = StringField('简历地址')
+=======
     resume = FileField('上传简历', validators=[FileRequired()])
+>>>>>>> 在线招聘系统
     submit = SubmitField('提交')
 
     def validate_phone(self, field):
@@ -62,7 +76,9 @@ class UserProfileForm(FlaskForm):
         if phone[:2] not in ('13', '15', '18') and len(phone) != 11:
             raise ValidationError('请输入有效的手机号')
 
-
+<<<<<<< HEAD
+    def updated_profile(self, user):
+=======
     def upload_resume(self):
         f = self.resume.data
         filename = self.real_name.data + '.pdf'
@@ -75,14 +91,19 @@ class UserProfileForm(FlaskForm):
         return filename
 
     def update_profile(self, user):
+>>>>>>> 在线招聘系统
         user.real_name = self.real_name.data
         user.email = self.email.data
         if self.password.data:
             user.password = self.password.data
         user.phone = self.phone.data
         user.work_years = self.work_years.data
+<<<<<<< HEAD
+        user.resume_url = self.resume_url.data
+=======
         filename = self.upload_resume()
         user.resume_url = url_for('static', filename=os.path.join('resumes', filename))
+>>>>>>> 在线招聘系统
         db.session.add(user)
         db.session.commit()
 
@@ -161,6 +182,8 @@ class CompanyEditForm(FlaskForm):
         db.session.add(company)
         db.session.add(detail)
         db.session.commit()
+<<<<<<< HEAD
+=======
 
 
 class JobForm(FlaskForm):
@@ -207,4 +230,4 @@ class JobForm(FlaskForm):
         db.session.add(job)
         db.session.commit()
         return job
-
+>>>>>>> 在线招聘系统

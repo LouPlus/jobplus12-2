@@ -1,3 +1,15 @@
+<<<<<<< HEAD
+Flask==1.0.3
+Flask-Bootstrap==3.3.7.1
+Flask-Login==0.4.1
+Flask-Migrate==2.5.2
+Flask-SQLAlchemy==2.4.0
+Flask-WTF==0.14.2
+gunicorn==19.9.0
+PyMySQL==0.9.3
+Werkzeug==0.15.4
+
+=======
 alembic==0.9.6
 certifi==2017.11.5
 chardet==3.0.4
@@ -23,4 +35,4 @@ text-unidecode==1.1
 urllib3==1.22
 Werkzeug==0.12.2
 WTForms==2.1
-
+>>>>>>> 在线招聘系统
